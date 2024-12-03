@@ -1,6 +1,6 @@
 import React from "react";
 import FileUploader from "@/components/fileUploader";
-import Layout from "@/components/layout";
+import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -34,26 +34,21 @@ const CreatePost: React.FunctionComponent<ICreatePostProps> = (props) => {
     console.log("Uploaded File Entry : ", fileEntry.files);
     console.log("Created post: ", post);
     
-    const photoMeta: PhotoMeta[] = fileEntry.files.map((file) => ({
-      cdnUrl: file.cdnUrl,
-      uuid: file.uuid,
-    }));
-    
+    const photoMeta: PhotoMeta[] = fileEntry.files.map((file) => {
+      return{cdnUrl: file.cdnUrl,uuid: file.uuid};
+    });
     if (user != null) {
       const newPost: Post = {
-        ...post,
+         ...post,
         userId: user?.uid || null,
         photos: photoMeta,
       };
-      
-      console.log("The final post is : ", newPost);
-      
-      
-      navigate("/");
-    } else {
-      navigate("/login");
-    }
-  };
+    console.log("The final post is : ", newPost);
+    //   navigate("/");
+    // } else {
+    //   navigate("/login");
+    // }
+  }};
 
   return (
     <Layout>
@@ -84,10 +79,12 @@ const CreatePost: React.FunctionComponent<ICreatePostProps> = (props) => {
                 </Label>
                 <FileUploader 
                   files={fileEntry.files} 
-                  onChange={setFileEntry} 
+                  onChange={(updatedFiles) =>
+                  setFileEntry({ files: updatedFiles })
+                  } 
                   uploaderClassName="your-class-name" 
                   theme="light" 
-                />
+                  />
               </div>
               <Button className="mt-8 w-32" type="submit">
                 Post

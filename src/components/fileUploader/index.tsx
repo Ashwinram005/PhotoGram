@@ -52,19 +52,13 @@ export default function FileUploader({
 
   const handleRemoveClick = useCallback(
     (uuid: OutputFileEntry["uuid"]) => {
-      // Filter out the file to be removed from both arrays
-      const updatedUploadedFiles = uploadedFiles.filter(
-        (file) => file.uuid !== uuid
-      );
       const updatedFiles = files.filter((file) => file.uuid !== uuid);
+      const updatedUploadedFiles = uploadedFiles.filter((file) => file.uuid !== uuid);
 
-      // Update the parent component with the updated list
       onChange([...updatedFiles, ...updatedUploadedFiles]);
-
-      // Update the local state for uploadedFiles
       setUploadedFiles(updatedUploadedFiles);
 
-      console.log("Removed file with UUID:", uuid); // Debugging output
+      console.log("Updated after removal:", [...updatedFiles, ...updatedUploadedFiles]);
     },
     [files, uploadedFiles, onChange]
   );
@@ -75,20 +69,19 @@ export default function FileUploader({
   const handleModalCloseEvent = () => {
     resetUploaderState();
 
-    // Combine existing files with newly uploaded ones, ensuring no duplicates
-    const allFiles = [...files, ...uploadedFiles].filter(
+    const combinedFiles = [...files, ...uploadedFiles].filter(
       (file, index, array) =>
         array.findIndex((f) => f.uuid === file.uuid) === index
     );
-    onChange(allFiles);
+    onChange(combinedFiles);
 
-    console.log("All files after modal close:", allFiles); // Debugging output
+    console.log("All files after modal close:", combinedFiles);
   };
 
   const handleChangeEvent = (uploadResult: {
     allEntries: OutputFileEntry<"success">[];
   }) => {
-    if (!uploadResult || !uploadResult.allEntries) {
+    if (!uploadResult?.allEntries) {
       console.error("Invalid files received:", uploadResult);
       return;
     }
@@ -97,23 +90,15 @@ export default function FileUploader({
       (f) => f.status === "success"
     );
 
-    setUploadedFiles((prevUploadedFiles) => {
-      const newFiles = successfulFiles.filter(
-        (newFile) =>
-          !prevUploadedFiles.some(
-            (existingFile) => existingFile.uuid === newFile.uuid
-          )
-      );
-      return [...prevUploadedFiles, ...newFiles];
-    });
-
-    const combinedFiles = [...files, ...successfulFiles].filter(
+    const newUploadedFiles = [...uploadedFiles, ...successfulFiles].filter(
       (file, index, array) =>
         array.findIndex((f) => f.uuid === file.uuid) === index
     );
-    onChange(combinedFiles);
 
-    console.log("Updated Files:", combinedFiles);
+    setUploadedFiles(newUploadedFiles);
+    onChange(newUploadedFiles);
+
+    console.log("Files after change:", newUploadedFiles);
   };
 
   return (
@@ -121,7 +106,7 @@ export default function FileUploader({
       <FileUploaderRegular
         pubkey="f851a2ed0d7f578532f9"
         maxLocalFileSizeBytes={10000000}
-        imgOnly={true}
+        imgOnly
         sourceList="local, url, camera, gdrive"
         classNameUploader="my-config uc-light"
         multiple
@@ -137,9 +122,9 @@ export default function FileUploader({
         {uploadedFiles.map((file) => (
           <div key={file.uuid} className="relative">
             <img
-              src={`${file.cdnUrl}/-/format/auto/-/quality/smart/-/stretch/fill/`}
+              src={`${file.cdnUrl}/-/format/webp/-/quality/smart/-/stretch/fill/`}
               className="w-full h-auto object-cover"
-              alt={file.fileInfo?.originalFilename || ""}
+              alt={file.fileInfo?.originalFilename || "Uploaded photo"}
             />
             <div className="cursor-pointer flex justify-center absolute -right-2 -top-2 bg-white border-2 border-slate-800 rounded-full w-7 h-7">
               <button
