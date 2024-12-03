@@ -126,7 +126,7 @@ export default function FileUploader({
               className="w-full h-auto object-cover"
               alt={file.fileInfo?.originalFilename || "Uploaded photo"}
             />
-            <div className="cursor-pointer flex justify-center absolute -right-2 -top-2 bg-white border-2 border-slate-800 rounded-full w-7 h-7">
+              <div className="cursor-pointer flex justify-center absolute -right-2 -top-2 bg-white border-2 border-slate-800 rounded-full w-7 h-7">
               <button
                 className="text-slate-800 text-center"
                 type="button"

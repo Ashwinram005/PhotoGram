@@ -8,6 +8,7 @@ import { useUserAuth } from "@/context/userAuthContext";
 // import { createP ost } from "@/repository/post.service"; // Uncomment when available
 import { FileEntry, PhotoMeta, Post } from "@/types";
 import { useNavigate } from "react-router-dom";
+import { createPost } from "@/repository/postservice";
 
 interface ICreatePostProps {}
 
@@ -43,12 +44,14 @@ const CreatePost: React.FunctionComponent<ICreatePostProps> = (props) => {
         userId: user?.uid || null,
         photos: photoMeta,
       };
-    console.log("The final post is : ", newPost);
-    //   navigate("/");
-    // } else {
-    //   navigate("/login");
-    // }
-  }};
+      console.log("The final post is : ", newPost);
+      await createPost(newPost);
+      navigate("/");
+    } 
+    else {
+      navigate("/login");
+    }
+  };
 
   return (
     <Layout>
