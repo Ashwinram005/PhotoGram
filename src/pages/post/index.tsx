@@ -28,10 +28,11 @@ const CreatePost: React.FunctionComponent<ICreatePostProps> = (props) => {
     date: new Date(),
   });
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
     
     console.log("Uploaded File Entry : ", fileEntry.files);
+    console.log("Created post: ", post);
     
     const photoMeta: PhotoMeta[] = fileEntry.files.map((file) => ({
       cdnUrl: file.cdnUrl,

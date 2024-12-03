@@ -133,11 +133,11 @@ export default function FileUploader({
         onChange={handleChangeEvent}
         className={cs(uploaderClassName)}
       />
-      <div className="grid grid-cols-2 gap-4 mt-4">
+      <div className="grid grid-cols-2 gap-4 mt-3">
         {uploadedFiles.map((file) => (
           <div key={file.uuid} className="relative">
             <img
-              src={`${file.cdnUrl}/-/format/webp/-/quality/smart/-/stretch/fill/`}
+              src={`${file.cdnUrl}/-/format/auto/-/quality/smart/-/stretch/fill/`}
               className="w-full h-auto object-cover"
               alt={file.fileInfo?.originalFilename || ""}
             />
