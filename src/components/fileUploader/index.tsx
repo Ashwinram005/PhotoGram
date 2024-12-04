@@ -123,7 +123,7 @@ export default function FileUploader({
           <div key={file.uuid} className="relative">
             <img
               src={`${file.cdnUrl}/-/format/webp/-/quality/smart/-/stretch/fill/`}
-              className="w-full h-auto object-cover"
+              className="w-full h-auto object-cover rounded-lg"
               alt={file.fileInfo?.originalFilename || "Uploaded photo"}
             />
               <div className="cursor-pointer flex justify-center absolute -right-2 -top-2 bg-white border-2 border-slate-800 rounded-full w-7 h-7">

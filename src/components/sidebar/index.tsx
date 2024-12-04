@@ -68,7 +68,7 @@ const Sidebar: React.FunctionComponent<ISidebarProps> = (props) => {
             "justify-start"
           )} 
           key={item.name}>
-            <Link to={item.link} className='flex'>
+            <Link to={item.link} className='flex w-full '>
               <span><img src={item.icon} className='w-5 h-5 mr-2' alt={item.name} 
                 style={{filter:`${pathname===item.link?"invert(0":"invert(1)"}`}}/></span>
               <span>{item.name}</span>
