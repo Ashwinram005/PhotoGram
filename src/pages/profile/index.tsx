@@ -14,6 +14,7 @@ interface IProfileProps {
 const Profile: React.FunctionComponent<IProfileProps> = (props) => {
   const {user}=useUserAuth();
   const navigate=useNavigate();
+  console.log("profile of user logged in",user);
   const initialUserInfo:ProfileResponse={
     id:"",
     userId:user?.uid,

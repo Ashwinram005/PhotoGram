@@ -3,18 +3,20 @@ import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { FileEntry } from '@/types';
+import { FileEntry, ProfileInfo } from '@/types';
 import { updateProfile, UserProfile } from 'firebase/auth';
 import * as React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import avatar from "@/assets/images/avatar.png"
 import { Input } from '@/components/ui/input';
 import { createUserProfile, updateUserProfile } from '@/repository/user.service';
+import { useUserAuth } from '@/context/userAuthContext';
 
 interface IEditProfileProps {
 }
 
 const EditProfile: React.FunctionComponent<IEditProfileProps> = (props) => {
+    const {user,updateProfileInfo}=useUserAuth();
     const location=useLocation();
     const navigate=useNavigate();
     const { id = '', userId = '', userBio = '', displayName = '', photoUrl = '' } =
@@ -42,6 +44,13 @@ const EditProfile: React.FunctionComponent<IEditProfileProps> = (props) => {
           const response=await createUserProfile(data);
           console.log("The created user profile is",response);
         }
+        const profileInfo:ProfileInfo={
+          user:user!,
+          displayName:data.displayName,
+          photoUrl:data.photoUrl,
+
+        }
+        updateProfileInfo(profileInfo);
         navigate("/profile");
       } catch (error) {
         console.error(error);
