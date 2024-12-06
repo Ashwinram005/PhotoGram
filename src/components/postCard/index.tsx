@@ -5,7 +5,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '../ui/card
 import image1 from "@/assets/images/image1.jpg"
 import { HeartIcon, MessageCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { updateLikesOnPost } from '@/repository/postservice';
+import { updateLikesOnPost } from '@/repository/post.service';
 
 interface IPostCardProps {
   data:DocumentResponse;

@@ -8,7 +8,7 @@ import { useUserAuth } from "@/context/userAuthContext";
 // import { createP ost } from "@/repository/post.service"; // Uncomment when available
 import { FileEntry, PhotoMeta, Post } from "@/types";
 import { useNavigate } from "react-router-dom";
-import { createPost } from "@/repository/postservice";
+import { createPost } from "@/repository/post.service";
 
 interface ICreatePostProps {}
 
@@ -86,7 +86,8 @@ const CreatePost: React.FunctionComponent<ICreatePostProps> = (props) => {
                   setFileEntry({ files: updatedFiles })
                   } 
                   uploaderClassName="your-class-name" 
-                  theme="light" 
+                  theme="light"
+                  preview={true}  
                   />
               </div>
               <Button className="mt-8 w-32" type="submit">

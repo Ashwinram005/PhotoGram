@@ -3,7 +3,7 @@ import PostCard from '@/components/postCard';
 import Stories from '@/components/Stories';
 import { Input } from '@/components/ui/input';
 import { useUserAuth } from '@/context/userAuthContext';
-import {  getPosts } from '@/repository/postservice';
+import {  getPosts } from '@/repository/post.service';
 import { DocumentResponse } from '@/types';
 import { Search } from 'lucide-react';
 import * as React from 'react';

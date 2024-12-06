@@ -9,6 +9,7 @@ import * as React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import avatar from "@/assets/images/avatar.png"
 import { Input } from '@/components/ui/input';
+import { createUserProfile, updateUserProfile } from '@/repository/user.service';
 
 interface IEditProfileProps {
 }
@@ -18,20 +19,44 @@ const EditProfile: React.FunctionComponent<IEditProfileProps> = (props) => {
     const navigate=useNavigate();
     const { id = '', userId = '', userBio = '', displayName = '', photoUrl = '' } =
     location.state || {};
+    console.log("location state: ",location.state);
     const [data,setData]=React.useState<UserProfile>({
         userId,
         displayName,
         photoUrl,
         userBio
     }); 
+
     const [fileEntry, setFileEntry] = React.useState<FileEntry>({
-        files: [],
+      files: [],
     });
 
-    const updateProfile = (e: React.FormEvent) => {
-        e.preventDefault(); // Prevent default form submission
-        console.log("Updated Data: ", data);
+    const updateProfile = async(e: React.MouseEvent<HTMLFormElement>) => {
+      e.preventDefault(); 
+      try {
+        if(id){
+          const response=await updateUserProfile(id,data);
+          console.log("Updated user profile is",response);
+        }
+        else{
+          const response=await createUserProfile(data);
+          console.log("The created user profile is",response);
+        }
+        navigate("/profile");
+      } catch (error) {
+        console.error(error);
+      }
     };
+
+    console.log("File entry",fileEntry);
+
+    React.useEffect(()=>{
+      if(fileEntry.files.length>0){
+          setData({...data,photoUrl:fileEntry.files[0].cdnUrl||""});
+      }
+     
+    },[fileEntry])
+
   return (
     <Layout>
     <div className="flex justify-center">
@@ -46,7 +71,8 @@ const EditProfile: React.FunctionComponent<IEditProfileProps> = (props) => {
                 Profile Picture
               </Label>
               <div className='mb-4'>
-                <img src={data?.photoUrl?data.photoUrl:avatar} alt="avatar" className='w-28 p-0.5 h-28 rounded-full border-2 border-slate-800 object-cover'/>
+               {fileEntry.files.length>0 ?<img src={`${fileEntry.files[0].cdnUrl!}/-/scale_crop/300x300/smart/-/border_radius/50p/`} alt="avatar" className='w-28 p-0.5 h-28 rounded-full border-2 border-slate-800 object-cover'/>:
+                <img src={data?.photoUrl?data.photoUrl:avatar} alt="avatar" className='w-28 p-0.5 h-28 rounded-full border-2 border-slate-800 object-cover'/>}
               </div>
               <FileUploader
                 files={fileEntry.files} 
@@ -55,9 +81,10 @@ const EditProfile: React.FunctionComponent<IEditProfileProps> = (props) => {
                 } 
                 uploaderClassName="your-class-name" 
                 theme="light" 
+                preview={false}
                 />
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col mt-5">
               <Label className="mb-4" htmlFor="displayName">
                 Display Name
               </Label>

@@ -31,10 +31,12 @@ export const getPosts=async()=>{
         console.log(error);
     }
 }
+
 export const getPostByUserId= (id:string)=>{
     const q=query(collection(db,COLLECTION_NAME),where("userId","==",id));  
     return getDocs(q);
 }
+
 export const getPost= (id:string)=>{
     const docref=doc(db,COLLECTION_NAME,id);  
     return getDoc(docref);

@@ -44,6 +44,7 @@ export interface UserLogIn {
     displayName?:string,
     photoUrl?:string,
   }
+
   export interface UserProfile{
     userId?:string
     displayName?:string,
@@ -52,8 +53,8 @@ export interface UserLogIn {
   }
 
   export interface ProfileResponse{
-    id?:string
-    userId?:string
+    id?:string,
+    userId?:string,
     displayName?:string,
     photoUrl?:string,
     userBio?:string

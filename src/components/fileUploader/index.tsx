@@ -14,6 +14,7 @@ type FileUploaderProps = {
   files: OutputFileEntry[]; // Ensuring files prop is an array
   onChange: (files: OutputFileEntry[]) => void;
   theme: "light" | "dark";
+  preview:boolean
 };
 
 const localeDefinitionOverride = {
@@ -44,10 +45,12 @@ export default function FileUploader({
   uploaderClassName,
   onChange,
   theme,
+  preview,
 }: FileUploaderProps) {
   const [uploadedFiles, setUploadedFiles] = useState<OutputFileEntry<"success">[]>(
     []
   );
+  
   const ctxProviderRef = useRef<InstanceType<UploadCtxProvider>>(null);
 
   const handleRemoveClick = useCallback(
@@ -109,7 +112,7 @@ export default function FileUploader({
         imgOnly
         sourceList="local, url, camera, gdrive"
         classNameUploader="my-config uc-light"
-        multiple
+        multiple={preview}
         removeCopyright
         confirmUpload={false}
         localeDefinitionOverride={localeDefinitionOverride}
@@ -118,26 +121,30 @@ export default function FileUploader({
         onChange={handleChangeEvent}
         className={cs(uploaderClassName)}
       />
-      <div className="grid grid-cols-2 gap-4 mt-3">
-        {uploadedFiles.map((file) => (
-          <div key={file.uuid} className="relative">
-            <img
-              src={`${file.cdnUrl}/-/format/webp/-/quality/smart/-/stretch/fill/`}
-              className="w-full h-auto object-cover rounded-lg"
-              alt={file.fileInfo?.originalFilename || "Uploaded photo"}
-            />
-              <div className="cursor-pointer flex justify-center absolute -right-2 -top-2 bg-white border-2 border-slate-800 rounded-full w-7 h-7">
-              <button
-                className="text-slate-800 text-center"
-                type="button"
-                onClick={() => handleRemoveClick(file.uuid)}
-              >
-                ×
-              </button>
-            </div>
+      {
+        preview?
+          <div className="grid grid-cols-2 gap-4 mt-3">
+            {uploadedFiles.map((file) => (
+              <div key={file.uuid} className="relative">
+                <img
+                  src={`${file.cdnUrl}/-/format/webp/-/quality/smart/-/stretch/fill/`}
+                  className="w-full h-auto object-cover rounded-lg"
+                  alt={file.fileInfo?.originalFilename || "Uploaded photo"}
+                />
+                  <div className="cursor-pointer flex justify-center absolute -right-2 -top-2 bg-white border-2 border-slate-800 rounded-full w-7 h-7">
+                  <button
+                    className="text-slate-800 text-center"
+                    type="button"
+                    onClick={() => handleRemoveClick(file.uuid)}
+                  >
+                    ×
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+          :<></>
+      }
     </div>
   );
 }

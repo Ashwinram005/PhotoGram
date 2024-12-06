@@ -1,6 +1,6 @@
 import Layout from '@/components/Layout';
 import { useUserAuth } from '@/context/userAuthContext';
-import { getPostByUserId } from '@/repository/postservice';
+import { getPostByUserId } from '@/repository/post.service';
 import { DocumentResponse, Post } from '@/types';
 import * as React from 'react';
 import { HeartIcon } from "lucide-react";

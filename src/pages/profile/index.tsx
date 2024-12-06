@@ -5,8 +5,9 @@ import * as React from 'react';
 import avatar from "@/assets/images/avatar.png"
 import { Button } from '@/components/ui/button';
 import { Edit2Icon, HeartIcon } from 'lucide-react';
-import { getPostByUserId } from '@/repository/postservice';
+import { getPostByUserId } from '@/repository/post.service';
 import { useNavigate } from 'react-router-dom';
+import { getUserProfile } from '@/repository/user.service';
 interface IProfileProps {
 }
 
@@ -25,6 +26,7 @@ const Profile: React.FunctionComponent<IProfileProps> = (props) => {
   
   const getAllPost=async(id:string)=>{
     try {
+      console.log("URL PHTOTo",userInfo.photoUrl,userInfo.displayName);
       const querySnapshot=await getPostByUserId(id);
       console.log(querySnapshot);
       const tempArr:DocumentResponse[]=[];
@@ -50,13 +52,6 @@ const Profile: React.FunctionComponent<IProfileProps> = (props) => {
     }
   }
 
-  React.useEffect(()=>{
-    if(user!=null){
-      console.log("The logged in user is : ",user);
-      getAllPost(user.uid);
-    }
-  },[])
-
   const renderPosts=()=>{
     return data.map((item) => {
       return (
@@ -74,9 +69,24 @@ const Profile: React.FunctionComponent<IProfileProps> = (props) => {
     ) 
   }
 
+  
   const editProfile=()=>{
     navigate("/edit-profile",{state:userInfo});
+  } 
+  
+  const getUserProfileInfo=async(userId:string)=>{
+    const data:ProfileResponse=await getUserProfile(userId)||{};
+    if(data)
+      setUserInfo(data);
   }
+
+  React.useEffect(()=>{
+    if(user!=null){
+      console.log("The logged in user is : ",user);
+      getAllPost(user.uid);
+      getUserProfileInfo(user.uid);
+    }
+  },[])
 
   return (
     <Layout>
