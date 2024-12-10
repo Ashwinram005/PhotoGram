@@ -25,7 +25,7 @@ export const getPosts=async()=>{
             return tempArr;
         }
         else    
-            console.log("No such documnet");
+            console.log("No such document");
     }
     catch(error){
         console.log(error);
