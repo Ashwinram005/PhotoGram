@@ -2,7 +2,6 @@ import { useUserAuth } from '@/context/userAuthContext';
 import { DocumentResponse } from '@/types';
 import * as React from 'react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '../ui/card';
-import image1 from "@/assets/images/image1.jpg"
 import { HeartIcon, MessageCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { updateLikesOnPost } from '@/repository/post.service';
@@ -17,8 +16,8 @@ const PostCard: React.FunctionComponent<IPostCardProps> = ({data}) => {
     likes:number,
     isLike:boolean
   }>({
-    likes:data?.likes,
-    isLike:data.userlikes?.includes(user?.uid)?true:false
+    likes:data.likes!,
+    isLike:data.userlikes?.includes(user!.uid)?true:false
   });
 
   const updateLike=async(isVal:boolean)=>{

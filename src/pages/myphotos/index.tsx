@@ -8,7 +8,7 @@ import { HeartIcon } from "lucide-react";
 interface IMyPhotosProps {
 }
 
-const MyPhotos: React.FunctionComponent<IMyPhotosProps> = (props) => {
+const MyPhotos: React.FunctionComponent<IMyPhotosProps> = () => {
   const {user}=useUserAuth();
   const [data,setData]=React.useState<DocumentResponse[]>([]);  
 
@@ -23,6 +23,7 @@ const MyPhotos: React.FunctionComponent<IMyPhotosProps> = (props) => {
           const responseObj: DocumentResponse = {
             id: doc.id,
             ...data,
+            userId:data.userId||null,
           };
           console.log("The response object is:", responseObj);
           tempArr.push(responseObj);
@@ -48,7 +49,8 @@ const MyPhotos: React.FunctionComponent<IMyPhotosProps> = (props) => {
 
   const renderPost=()=>{
     return data.map((item) => {
-      return (
+      if (item.photos && item.photos.length > 0) {
+          return (
         <div key={item.photos[0].uuid} className='relative'>
           <div className='absolute group transition-all duration-200 bg-transparent hover:bg-slate-950 hover:bg-opacity-75 bottom-0 left-0 right-0  w-full h-full'>
               <div className='flex flex-col justify-center items-center w-full h-full'>
@@ -60,7 +62,10 @@ const MyPhotos: React.FunctionComponent<IMyPhotosProps> = (props) => {
         </div>
       )
     }
-    )
+    else {
+      return <div key={item.id}>No photos available</div>;
+    }
+    })
   }
   return (
     <Layout>

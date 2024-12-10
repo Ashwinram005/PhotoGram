@@ -5,14 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useUserAuth } from "@/context/userAuthContext";
-// import { createP ost } from "@/repository/post.service"; // Uncomment when available
 import { FileEntry, PhotoMeta, Post } from "@/types";
 import { useNavigate } from "react-router-dom";
 import { createPost } from "@/repository/post.service";
 
 interface ICreatePostProps {}
 
-const CreatePost: React.FunctionComponent<ICreatePostProps> = (props) => {
+const CreatePost: React.FunctionComponent<ICreatePostProps> = () => {
   const navigate = useNavigate();
   const { user } = useUserAuth();
   
@@ -25,7 +24,8 @@ const CreatePost: React.FunctionComponent<ICreatePostProps> = (props) => {
     photos: [],
     likes: 0,
     userlikes: [],
-    userId: null,
+    userId:null,
+    username:"",
     date: new Date(),
   });
 
@@ -41,7 +41,7 @@ const CreatePost: React.FunctionComponent<ICreatePostProps> = (props) => {
     if (user != null) {
       const newPost: Post = {
          ...post,
-        userId: user?.uid,
+        userId: user?.uid || "",
         photos: photoMeta,
         username:user.displayName!,
         photoUrl:user.photoURL!
@@ -88,7 +88,6 @@ const CreatePost: React.FunctionComponent<ICreatePostProps> = (props) => {
                   setFileEntry({ files: updatedFiles })
                   } 
                   uploaderClassName="your-class-name" 
-                  theme="light"
                   preview={true}  
                   />
               </div>

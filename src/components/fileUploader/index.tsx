@@ -1,19 +1,17 @@
-import React, { useCallback, useRef, useState } from "react";
-import { OutputFileEntry } from "@uploadcare/file-uploader";
+import { useCallback, useRef, useState } from "react";
+import { OutputCollectionState, OutputCollectionStatus, OutputFileEntry } from "@uploadcare/file-uploader";
 import {
   FileUploaderRegular,
   type UploadCtxProvider,
 } from "@uploadcare/react-uploader";
 import st from "./FileUploader.module.scss";
-import cssOverrides from "./FileUploader.overrides.module.css";
 import cs from "classnames";
 import "@uploadcare/react-uploader/core.css";
 
 type FileUploaderProps = {
   uploaderClassName: string;
-  files: OutputFileEntry[]; // Ensuring files prop is an array
+  files: OutputFileEntry[]; 
   onChange: (files: OutputFileEntry[]) => void;
-  theme: "light" | "dark";
   preview:boolean
 };
 
@@ -44,7 +42,6 @@ export default function FileUploader({
   files = [],
   uploaderClassName,
   onChange,
-  theme,
   preview,
 }: FileUploaderProps) {
   const [uploadedFiles, setUploadedFiles] = useState<OutputFileEntry<"success">[]>(
@@ -81,28 +78,25 @@ export default function FileUploader({
     console.log("All files after modal close:", combinedFiles);
   };
 
-  const handleChangeEvent = (uploadResult: {
-    allEntries: OutputFileEntry<"success">[];
-  }) => {
-    if (!uploadResult?.allEntries) {
-      console.error("Invalid files received:", uploadResult);
+  const handleChangeEvent = (event: OutputCollectionState<OutputCollectionStatus, "maybe-has-group">) => {
+    if (!event?.successEntries) {
+      console.error("Invalid files received:", event);
       return;
     }
-
-    const successfulFiles = uploadResult.allEntries.filter(
-      (f) => f.status === "success"
-    );
-
+  
+    // Filter for successful files
+    const successfulFiles = event.successEntries.filter((f) => f.status === "success");
+  
     const newUploadedFiles = [...uploadedFiles, ...successfulFiles].filter(
-      (file, index, array) =>
-        array.findIndex((f) => f.uuid === file.uuid) === index
+      (file, index, array) => array.findIndex((f) => f.uuid === file.uuid) === index
     );
-
+  
     setUploadedFiles(newUploadedFiles);
     onChange(newUploadedFiles);
-
+  
     console.log("Files after change:", newUploadedFiles);
   };
+  
 
   return (
     <div className={st.root}>

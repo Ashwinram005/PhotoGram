@@ -7,9 +7,10 @@ import { Link } from 'react-router-dom';
 import { Button } from '../ui/button';
 
 interface  IUserListProps {
+
 }
 
-const UserList: React.FunctionComponent<UserListProps> = (props) => {
+const UserList: React.FunctionComponent<IUserListProps> = () => {
   const {user}=useUserAuth();
   const [suggesetedUser,setSuggestedUser]=React.useState<ProfileResponse[]>([]);
 

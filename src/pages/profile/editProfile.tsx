@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { FileEntry, ProfileInfo } from '@/types';
-import { updateProfile, UserProfile } from 'firebase/auth';
+import {  UserProfile } from 'firebase/auth';
 import * as React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import avatar from "@/assets/images/avatar.png"
@@ -13,21 +13,35 @@ import { createUserProfile, updateUserProfile } from '@/repository/user.service'
 import { useUserAuth } from '@/context/userAuthContext';
 import { updateProfileInfoOnPosts } from '@/repository/post.service';
 
+interface LocationState {
+  id?: string;
+  userId?: string;
+  displayName?: string;
+  userBio?: string;
+  photoUrl?: string;
+}
+
 interface IEditProfileProps {
 }
 
-const EditProfile: React.FunctionComponent<IEditProfileProps> = (props) => {
+const EditProfile: React.FunctionComponent<IEditProfileProps> = () => {
     const {user,updateProfileInfo}=useUserAuth();
     const location=useLocation();
     const navigate=useNavigate();
-    const { id = '', userId = '', userBio = '', displayName = '', photoUrl = '' } =
-    location.state || {};
+    const {
+      id = '',
+      userId = '',
+      displayName = '',
+      userBio = '',
+      photoUrl = '',
+    } = (location.state || {}) as LocationState;
+    
     console.log("location state: ",location.state);
     const [data,setData]=React.useState<UserProfile>({
         userId,
-        displayName,
-        photoUrl,
-        userBio
+        displayName:displayName||"",
+        photoUrl:photoUrl||undefined,
+        userBio:userBio||""
     }); 
 
     const [fileEntry, setFileEntry] = React.useState<FileEntry>({
@@ -47,8 +61,8 @@ const EditProfile: React.FunctionComponent<IEditProfileProps> = (props) => {
         }
         const profileInfo:ProfileInfo={
           user:user!,
-          displayName:data.displayName,
-          photoUrl:data.photoUrl,
+          displayName:data.displayName as string,
+          photoUrl:data.photoUrl as string,
 
         }
         updateProfileInfo(profileInfo);
@@ -63,7 +77,7 @@ const EditProfile: React.FunctionComponent<IEditProfileProps> = (props) => {
 
     React.useEffect(()=>{
       if(fileEntry.files.length>0){
-          setData({...data,photoUrl:fileEntry.files[0].cdnUrl||""});
+          setData({...data,photoUrl:fileEntry.files[0].cdnUrl||undefined});
       }
      
     },[fileEntry])
@@ -83,7 +97,7 @@ const EditProfile: React.FunctionComponent<IEditProfileProps> = (props) => {
               </Label>
               <div className='mb-4'>
                {fileEntry.files.length>0 ?<img src={`${fileEntry.files[0].cdnUrl!}/-/scale_crop/300x300/smart/-/border_radius/50p/`} alt="avatar" className='w-28 p-0.5 h-28 rounded-full border-2 border-slate-800 object-cover'/>:
-                <img src={data?.photoUrl?data.photoUrl:avatar} alt="avatar" className='w-28 p-0.5 h-28 rounded-full border-2 border-slate-800 object-cover'/>}
+                <img src={typeof data.photoUrl === 'string' && data.photoUrl.trim() ? data.photoUrl : avatar} alt="avatar" className='w-28 p-0.5 h-28 rounded-full border-2 border-slate-800 object-cover'/>}
               </div>
               <FileUploader
                 files={fileEntry.files} 
@@ -91,7 +105,6 @@ const EditProfile: React.FunctionComponent<IEditProfileProps> = (props) => {
                 setFileEntry({ files: updatedFiles })
                 } 
                 uploaderClassName="your-class-name" 
-                theme="light" 
                 preview={false}
                 />
             </div>
@@ -103,7 +116,7 @@ const EditProfile: React.FunctionComponent<IEditProfileProps> = (props) => {
                 className="mb-8"
                 id="dsplayName"
                 placeholder="Enter your name"
-                value={data.displayName}
+                value={data.displayName as string}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setData({ ...data, displayName: e.target.value })
                 }
@@ -117,7 +130,7 @@ const EditProfile: React.FunctionComponent<IEditProfileProps> = (props) => {
                 className="mb-8"
                 id="userBio"
                 placeholder="What's in your mind?"
-                value={data.userBio}
+                value={data.userBio as string}
                 onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
                   setData({ ...data, userBio: e.target.value })
                 }

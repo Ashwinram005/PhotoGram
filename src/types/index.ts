@@ -1,10 +1,11 @@
 import { OutputFileEntry } from "@uploadcare/react-uploader";
 import { User } from "firebase/auth";
 
-export interface UserLogIn {
+  export interface UserLogIn {
     email: string;
     password: string;
   }
+
   export interface UserSignIn {
     email: string;
     password: string;
@@ -19,10 +20,10 @@ export interface UserLogIn {
     caption: string;
     photos: PhotoMeta[];
     likes: number;
-    userlikes: [];
-    userId: string;
+    userlikes: string[];
+    userId: string|null;
     username:string,
-    photourl?:string
+    photoUrl?:string
     date: Date;
   }
   
@@ -36,10 +37,10 @@ export interface UserLogIn {
     caption?: string;
     photos?: PhotoMeta[];
     likes?: number;
-    userlikes?: [];
-    userId?: string ;
+    userlikes?:string [];
+    userId?: string |null;
     username?:string,
-    photourl?:string,
+    photoUrl?:string,
     date?: Date;
   }
 
