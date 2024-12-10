@@ -36,13 +36,15 @@ const CreatePost: React.FunctionComponent<ICreatePostProps> = (props) => {
     console.log("Created post: ", post);
     
     const photoMeta: PhotoMeta[] = fileEntry.files.map((file) => {
-      return{cdnUrl: file.cdnUrl,uuid: file.uuid};
+      return{cdnUrl: file.cdnUrl!,uuid: file.uuid!};
     });
     if (user != null) {
       const newPost: Post = {
          ...post,
-        userId: user?.uid || null,
+        userId: user?.uid,
         photos: photoMeta,
+        username:user.displayName!,
+        photoUrl:user.photoURL!
       };
       console.log("The final post is : ", newPost);
       await createPost(newPost);

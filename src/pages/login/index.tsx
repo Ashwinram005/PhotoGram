@@ -93,7 +93,7 @@ const Login: React.FunctionComponent<ILoginProps> = () => {
             <Label htmlFor="email">Email address:</Label>
             <Input id="email" 
               type="email" 
-              placeholder="Password" 
+              placeholder="Email" 
               value={userLoginInfo.email}
               onChange={(e:React.ChangeEvent<HTMLInputElement>)=>
                 setUserLoginInfo({...userLoginInfo,email:e.target.value})

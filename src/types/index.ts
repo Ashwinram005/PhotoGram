@@ -20,7 +20,9 @@ export interface UserLogIn {
     photos: PhotoMeta[];
     likes: number;
     userlikes: [];
-    userId: string | null;
+    userId: string;
+    username:string,
+    photourl?:string
     date: Date;
   }
   
@@ -35,7 +37,9 @@ export interface UserLogIn {
     photos?: PhotoMeta[];
     likes?: number;
     userlikes?: [];
-    userId?: string | null;
+    userId?: string ;
+    username?:string,
+    photourl?:string,
     date?: Date;
   }
 

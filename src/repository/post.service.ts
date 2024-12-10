@@ -1,5 +1,5 @@
 import { db } from "@/firebaseConfig";
-import { DocumentResponse, Post } from "@/types";
+import { DocumentResponse, Post, ProfileInfo } from "@/types";
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, orderBy, query, updateDoc, where } from "firebase/firestore";
 
 const COLLECTION_NAME="posts";
@@ -52,4 +52,22 @@ export const updateLikesOnPost=async(id:string,userlikes:string[],likes:number)=
         likes:likes,
         userlikes:userlikes,
     });
+}
+
+export const updateProfileInfoOnPosts=async(profileInfo:ProfileInfo)=>{
+    const q=query(collection(db,COLLECTION_NAME),where("userId","==",profileInfo.user?.uid));  
+    const querySnapshot=await getDocs(q);
+    if(querySnapshot.size>0){
+        querySnapshot.forEach((document)=>{
+            const docRef=doc(db,COLLECTION_NAME,document.id);
+            updateDoc(docRef,{
+                username:profileInfo.displayName,
+                photoUrl:profileInfo.photoUrl,
+        
+            });
+        })
+    }
+    else{
+        console.log("The user doesnt have any post");
+    }
 }

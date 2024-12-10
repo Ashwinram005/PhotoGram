@@ -11,6 +11,7 @@ import avatar from "@/assets/images/avatar.png"
 import { Input } from '@/components/ui/input';
 import { createUserProfile, updateUserProfile } from '@/repository/user.service';
 import { useUserAuth } from '@/context/userAuthContext';
+import { updateProfileInfoOnPosts } from '@/repository/post.service';
 
 interface IEditProfileProps {
 }
@@ -51,6 +52,7 @@ const EditProfile: React.FunctionComponent<IEditProfileProps> = (props) => {
 
         }
         updateProfileInfo(profileInfo);
+        updateProfileInfoOnPosts(profileInfo);
         navigate("/profile");
       } catch (error) {
         console.error(error);

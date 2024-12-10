@@ -28,6 +28,7 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
   },[]);
 
   const renderPosts=()=>{
+    console.log(data);
     return data.map((item)=>{
       return <PostCard data={item} key={item.id}/>
     }

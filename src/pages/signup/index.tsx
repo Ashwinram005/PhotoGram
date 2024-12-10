@@ -111,7 +111,7 @@ const Signup: React.FunctionComponent<ISignupProps> = () => {
               <Label htmlFor="confirmpassword">Confirm password</Label>
               <Input id="confirmpassword" 
                 type="password" 
-                placeholder="ashwinram@example.com" 
+                placeholder="Confirm password" 
                 value={userInfo.confirmPassword}
                 onChange={(e:React.ChangeEvent<HTMLInputElement>)=>
                 setUserInfo({...userInfo,confirmPassword:e.target.value})}
